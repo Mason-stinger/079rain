@@ -156,7 +156,7 @@ static void ui_draw_sidebar_temp_metric(UIState *s) {
       {cereal::ThermalData::ThermalStatus::DANGER, 3}};
   std::string temp_val = std::to_string((int)s->scene.thermal.getAmbient()) + "°C";
   //ui_draw_sidebar_metric(s, NULL, temp_val.c_str(), temp_severity_map[s->scene.thermal.getThermalStatus()], 0, NULL);
-  ui_draw_sidebar_metric2(s, temp_severity_map[s->scene.thermal.getThermalStatus()], 0, temp_val.c_str());
+  ui_draw_sidebar_metric2(s, temp_severity_map[s->scene.thermal.getThermalStatus()], 45, temp_val.c_str());
 }
 
 static void ui_draw_sidebar_panda_metric(UIState *s) {

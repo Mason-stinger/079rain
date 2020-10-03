@@ -227,6 +227,15 @@ int main(int argc, char* argv[]) {
       set_awake(s, false);
     }
 
+    if(dashcam(s, touch_x, touch_y))
+        touched = 0;
+
+    if (touched == 1) {
+      set_awake(s, true);
+      handle_sidebar_touch(s, touch_x, touch_y);
+      handle_vision_touch(s, touch_x, touch_y);
+    }
+
     // Don't waste resources on drawing in case screen is off
     if (!s->awake) {
       continue;
@@ -243,15 +252,6 @@ int main(int argc, char* argv[]) {
     update_offroad_layout_state(s, pm);
 
     ui_draw(s);
-
-    if(dashcam(s, touch_x, touch_y))
-        touched = 0;
-
-    if (touched == 1) {
-      set_awake(s, true);
-      handle_sidebar_touch(s, touch_x, touch_y);
-      handle_vision_touch(s, touch_x, touch_y);
-    }
 
     double u2 = millis_since_boot();
     if (!s->scene.frontview && (u2-u1 > 66)) {
