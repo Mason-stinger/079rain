@@ -380,14 +380,14 @@ static void ui_draw_world(UIState *s) {
   ui_draw_vision_lanes(s);
 
   // Draw lead indicators if openpilot is handling longitudinal
-  if (s->longitudinal_control) {
+  //if (s->longitudinal_control) {
     if (scene->lead_data[0].getStatus()) {
       draw_lead(s, scene->lead_data[0]);
     }
     if (scene->lead_data[1].getStatus() && (std::abs(scene->lead_data[0].getDRel() - scene->lead_data[1].getDRel()) > 3.0)) {
       draw_lead(s, scene->lead_data[1]);
     }
-  }
+  //}
   nvgRestore(s->vg);
 }
 
@@ -597,14 +597,14 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
         cpuTemp /= cpuList.size();
     }
 
-      if((int)(cpuTemp/10) > 80) {
+      if(cpuTemp > 80.f) {
         val_color = nvgRGBA(255, 188, 3, 200);
       }
-      if((int)(cpuTemp/10) > 92) {
+      if(cpuTemp > 92.f) {
         val_color = nvgRGBA(255, 0, 0, 200);
       }
       // temp is alway in C * 10
-      snprintf(val_str, sizeof(val_str), "%d°", (int)(cpuTemp/10));
+      snprintf(val_str, sizeof(val_str), "%.1f°", cpuTemp);
       snprintf(uom_str, sizeof(uom_str), "");
     bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "CPU TEMP",
         bb_rx, bb_ry, bb_uom_dx,
@@ -621,14 +621,14 @@ static void bb_ui_draw_measures_right(UIState *s, int bb_x, int bb_y, int bb_w )
 
     float batteryTemp = scene->thermal.getBat();
 
-    if((int)(batteryTemp/1000) > 40) {
+    if(batteryTemp > 40.f) {
       val_color = nvgRGBA(255, 188, 3, 200);
     }
-    if((int)(batteryTemp/1000) > 50) {
+    if(batteryTemp > 50.f) {
       val_color = nvgRGBA(255, 0, 0, 200);
     }
     // temp is alway in C * 1000
-    snprintf(val_str, sizeof(val_str), "%d°", (int)(batteryTemp/1000));
+    snprintf(val_str, sizeof(val_str), "%.1f°", batteryTemp);
     snprintf(uom_str, sizeof(uom_str), "");
     bb_h +=bb_ui_draw_measure(s,  val_str, uom_str, "BAT TEMP",
         bb_rx, bb_ry, bb_uom_dx,
