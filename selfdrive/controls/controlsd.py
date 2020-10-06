@@ -455,7 +455,8 @@ class Controls:
     force_decel = (self.sm['dMonitoringState'].awarenessStatus < 0.) or \
                     (self.state == State.softDisabling)
 
-    steer_angle_rad = (CS.steeringAngle - self.sm['pathPlan'].angleOffset) * CV.DEG_TO_RAD
+    angleOffset = self.sm['pathPlan'].angleOffset
+    steer_angle_rad = (CS.steeringAngle - angleOffset) * CV.DEG_TO_RAD
 
     # controlsState
     dat = messaging.new_message('controlsState')
@@ -487,7 +488,7 @@ class Controls:
     controlsState.upAccelCmd = float(self.LoC.pid.p)
     controlsState.uiAccelCmd = float(self.LoC.pid.i)
     controlsState.ufAccelCmd = float(self.LoC.pid.f)
-    controlsState.angleSteersDes = float(self.LaC.angle_steers_des)
+    controlsState.angleSteersDes = float(self.LaC.angle_steers_des + angleOffset)
     controlsState.vTargetLead = float(v_acc)
     controlsState.aTarget = float(a_acc)
     controlsState.jerkFactor = float(self.sm['plan'].jerkFactor)
