@@ -97,10 +97,9 @@ class PathPlanner():
 
     # Update vehicle model
     x = max(sm['liveParameters'].stiffnessFactor, 0.1)
-    sr = max(sm['liveParameters'].steerRatio, 0.1)
+    # sr = max(sm['liveParameters'].steerRatio, 0.1)
+    sr = max(self.tune.get('steerRatio'), 0.1)
     VM.update_params(x, sr)
-
-    VM.sR = self.tune.get('steerRatio')
 
     curvature_factor = VM.curvature_factor(v_ego)
 
