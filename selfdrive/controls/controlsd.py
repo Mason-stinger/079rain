@@ -477,7 +477,7 @@ class Controls:
     controlsState.active = self.active
     controlsState.vEgo = CS.vEgo
     controlsState.vEgoRaw = CS.vEgoRaw
-    controlsState.angleSteers = CS.steeringAngle
+    controlsState.angleSteers = CS.steeringAngle - angleOffset
     controlsState.curvature = self.VM.calc_curvature(steer_angle_rad, CS.vEgo)
     controlsState.steerOverride = CS.steeringPressed
     controlsState.state = self.state
@@ -488,7 +488,7 @@ class Controls:
     controlsState.upAccelCmd = float(self.LoC.pid.p)
     controlsState.uiAccelCmd = float(self.LoC.pid.i)
     controlsState.ufAccelCmd = float(self.LoC.pid.f)
-    controlsState.angleSteersDes = float(self.LaC.angle_steers_des + angleOffset)
+    controlsState.angleSteersDes = float(self.LaC.angle_steers_des)
     controlsState.vTargetLead = float(v_acc)
     controlsState.aTarget = float(a_acc)
     controlsState.jerkFactor = float(self.sm['plan'].jerkFactor)
