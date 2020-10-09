@@ -128,6 +128,7 @@ typedef struct UIScene {
   cereal::PathPlan::Reader path_plan;
 
   float gpsAccuracy;
+  float gpsAltitude;
 
   bool recording;
 
