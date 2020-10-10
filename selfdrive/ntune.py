@@ -132,10 +132,13 @@ class nTune():
   def checkValidCommon(self):
     updated = False
 
-    if self.checkValue("steerRatio", 5.0, 25.0, 13.0):
+    if self.checkValue("steerRatio", 5.0, 25.0, 13.5):
       updated = True
 
     if self.checkValue("steerActuatorDelay", 0.1, 0.8, 0.25):
+      updated = True
+
+    if self.checkValue("cameraOffset", -0.5., 0.5., 0.06):
       updated = True
 
     return updated
@@ -267,3 +270,7 @@ class nTune():
           os.chmod(self.file, 0o764)
       except:
         pass
+
+
+
+ntune_conf = nTune(None)
