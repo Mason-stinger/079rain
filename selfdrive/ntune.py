@@ -138,7 +138,7 @@ class nTune():
     if self.checkValue("steerActuatorDelay", 0.1, 0.8, 0.25):
       updated = True
 
-    if self.checkValue("cameraOffset", -0.5., 0.5., 0.06):
+    if self.checkValue("cameraOffset", -0.5, 0.5, 0.06):
       updated = True
 
     return updated
