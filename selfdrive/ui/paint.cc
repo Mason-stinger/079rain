@@ -733,12 +733,6 @@ static void bb_ui_draw_L_Extra(UIState *s)
     ui_draw_text(s->vg, text_x, y, str, 25 * 2.5, COLOR_WHITE_ALPHA(200), s->font_sans_regular);
 
     //y += height;
-    //snprintf(str, sizeof(str), "ACC: %.3f, %.3f",
-    //            scene->car_control.getActuators().getGas() - scene->car_control.getActuators().getBrake(),
-    //            scene->controls_state.getApplyAccel());
-    //ui_draw_text(s->vg, text_x, y, str, 25 * 2.5, COLOR_WHITE_ALPHA(200), s->font_sans_regular);
-
-    //y += height;
     //snprintf(str, sizeof(str), "ST: %.3f", scene->car_state.getSteeringTorque());
     //ui_draw_text(s->vg, text_x, y, str, 25 * 2.5, COLOR_WHITE_ALPHA(200), s->font_sans_regular);
 
