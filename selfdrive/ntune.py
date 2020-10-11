@@ -274,7 +274,7 @@ def ntune_get(key):
   if ntune == None:
     ntune = nTune()
 
-  if not ntune.config.has_key(key):
+  if ntune.config == None or not ntune.config.has_key(key):
     ntune.read()
 
   v = ntune.config[key]
