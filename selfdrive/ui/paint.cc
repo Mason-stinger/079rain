@@ -732,11 +732,11 @@ static void bb_ui_draw_L_Extra(UIState *s)
     snprintf(str, sizeof(str), "O: %.3f, %.0f", lqr.getOutput(), scene->controls_state.getApplySteer());
     ui_draw_text(s->vg, text_x, y, str, 25 * 2.5, COLOR_WHITE_ALPHA(200), s->font_sans_regular);
 
-    y += height;
-    snprintf(str, sizeof(str), "ACC: %.3f, %.3f",
-                scene->car_control.getActuators().getGas() - scene->car_control.getActuators().getBrake(),
-                scene->controls_state.getApplyAccel());
-    ui_draw_text(s->vg, text_x, y, str, 25 * 2.5, COLOR_WHITE_ALPHA(200), s->font_sans_regular);
+    //y += height;
+    //snprintf(str, sizeof(str), "ACC: %.3f, %.3f",
+    //            scene->car_control.getActuators().getGas() - scene->car_control.getActuators().getBrake(),
+    //            scene->controls_state.getApplyAccel());
+    //ui_draw_text(s->vg, text_x, y, str, 25 * 2.5, COLOR_WHITE_ALPHA(200), s->font_sans_regular);
 
     //y += height;
     //snprintf(str, sizeof(str), "ST: %.3f", scene->car_state.getSteeringTorque());
@@ -770,7 +770,7 @@ static void bb_ui_draw_UI(UIState *s)
 
   const int bb_dmr_w = 180;
   const int bb_dmr_x = scene->viz_rect.x + scene->viz_rect.w - bb_dmr_w - (bdr_is * 2);
-  const int bb_dmr_y = (box_y + (bdr_is * 1.5)) + 220;
+  const int bb_dmr_y = (box_y + (bdr_is * 1.5)) + 50;
 
   bb_ui_draw_measures_left(s, bb_dml_x, bb_dml_y, bb_dml_w);
   bb_ui_draw_measures_right(s, bb_dmr_x, bb_dmr_y, bb_dmr_w);
@@ -924,6 +924,33 @@ static void ui_draw_driver_view(UIState *s) {
   ui_draw_circle_image(s->vg, x, y, face_size, s->img_face, scene->dmonitoring_state.getFaceDetected());
 }
 
+static void ui_draw_vision_brake(UIState *s) {
+  const UIScene *scene = &s->scene;
+  const int brake_size = 96;
+  const int brake_x = (scene->ui_viz_rx + (brake_size * 5) + (bdr_is * 4));
+  const int brake_y = (footer_y + ((footer_h - brake_size) / 2));
+  const int brake_img_size = (brake_size * 1.5);
+  const int brake_img_x = (brake_x - (brake_img_size / 2));
+  const int brake_img_y = (brake_y - (brake_size / 4));
+
+  bool brake_valid = scene->brakeLights;
+  float brake_img_alpha = brake_valid ? 1.0f : 0.15f;
+  float brake_bg_alpha = brake_valid ? 0.3f : 0.1f;
+  NVGcolor brake_bg = nvgRGBA(0, 0, 0, (255 * brake_bg_alpha));
+  NVGpaint brake_img = nvgImagePattern(s->vg, brake_img_x, brake_img_y,
+    brake_img_size, brake_img_size, 0, s->img_brake, brake_img_alpha);
+
+  nvgBeginPath(s->vg);
+  nvgCircle(s->vg, brake_x, (brake_y + (bdr_is * 1.5)), brake_size);
+  nvgFillColor(s->vg, brake_bg);
+  nvgFill(s->vg);
+
+  nvgBeginPath(s->vg);
+  nvgRect(s->vg, brake_img_x, brake_img_y, brake_img_size, brake_img_size);
+  nvgFillPaint(s->vg, brake_img);
+  nvgFill(s->vg);
+}
+
 static void ui_draw_vision_header(UIState *s) {
   const Rect &viz_rect = s->scene.viz_rect;
   NVGpaint gradient = nvgLinearGradient(s->vg, viz_rect.x,
@@ -935,11 +962,12 @@ static void ui_draw_vision_header(UIState *s) {
 
   ui_draw_vision_maxspeed(s);
   ui_draw_vision_speed(s);
-  ui_draw_vision_event(s);
+  //ui_draw_vision_event(s);
 }
 
 static void ui_draw_vision_footer(UIState *s) {
   ui_draw_vision_face(s);
+  ui_draw_vision_brake(s);
 }
 
 void ui_draw_vision_alert(UIState *s, cereal::ControlsState::AlertSize va_size, int va_color,
@@ -1143,6 +1171,8 @@ void ui_nvg_init(UIState *s) {
   assert(s->img_turn != 0);
   s->img_face = nvgCreateImage(s->vg, "../assets/img_driver_face.png", 1);
   assert(s->img_face != 0);
+  s->img_brake = nvgCreateImage(s->vg, "../assets/img_brake_disc.png", 1);
+  assert(s->img_brake != 0);
   s->img_button_settings = nvgCreateImage(s->vg, "../assets/images/button_settings.png", 1);
   assert(s->img_button_settings != 0);
   s->img_button_home = nvgCreateImage(s->vg, "../assets/images/button_home.png", 1);
