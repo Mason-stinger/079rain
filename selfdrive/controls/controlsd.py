@@ -21,7 +21,7 @@ from selfdrive.controls.lib.alertmanager import AlertManager
 from selfdrive.controls.lib.vehicle_model import VehicleModel
 from selfdrive.controls.lib.planner import LON_MPC_STEP
 from selfdrive.locationd.calibrationd import Calibration
-from selfdrive.ntune import ntune_conf
+from selfdrive.ntune import ntune_get
 
 LDW_MIN_SPEED = 31 * CV.MPH_TO_MS
 LANE_DEPARTURE_THRESHOLD = 0.1
@@ -435,7 +435,7 @@ class Controls:
       l_lane_change_prob = meta.desirePrediction[Desire.laneChangeLeft - 1]
       r_lane_change_prob = meta.desirePrediction[Desire.laneChangeRight - 1]
 
-      cameraOffset = ntune_conf.get("cameraOffset")
+      cameraOffset = ntune_get("cameraOffset")
 
       l_lane_close = left_lane_visible and (self.sm['pathPlan'].lPoly[3] < (1.08 - cameraOffset))
       r_lane_close = right_lane_visible and (self.sm['pathPlan'].rPoly[3] > -(1.08 + cameraOffset))

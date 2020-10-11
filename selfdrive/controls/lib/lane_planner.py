@@ -1,7 +1,7 @@
 from common.numpy_fast import interp
 import numpy as np
 from cereal import log
-from selfdrive.ntune import ntune_conf
+from selfdrive.ntune import ntune_get
 
 CAMERA_OFFSET = 0.06  # m from center car to camera
 
@@ -88,7 +88,7 @@ class LanePlanner():
   def update_d_poly(self, v_ego):
     # only offset left and right lane lines; offsetting p_poly does not make sense
 
-    cameraOffset = ntune_conf.get("cameraOffset")
+    cameraOffset = ntune_get("cameraOffset")
 
     print("cameraOffset", cameraOffset)
 

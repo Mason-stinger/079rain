@@ -12,7 +12,7 @@ CONF_INDI_FILE = '/data/ntune/lat_indi.json'
 
 
 class nTune():
-  def __init__(self, CP, controller=None):
+  def __init__(self, CP=None, controller=None):
 
     self.invalidated = False
 
@@ -45,20 +45,24 @@ class nTune():
       fd = os.open(CONF_PATH, os.O_RDONLY)
       fcntl.fcntl(fd, fcntl.F_SETSIG, 0)
       fcntl.fcntl(fd, fcntl.F_NOTIFY, fcntl.DN_MODIFY | fcntl.DN_CREATE | fcntl.DN_MULTISHOT)
-    except:
+    except Exception as ex:
+      print("exception", ex)
       pass
 
   def handler(self, signum, frame):
 
-    try:
-      if os.path.isfile(self.file):
-        with open(self.file, 'r') as f:
-          self.config = json.load(f)
-          if self.checkValid():
-            self.write_config(self.config)
+    if self.file == CONF_COMMON_FILE:
+      try:
 
-    except:
-      pass
+        if os.path.isfile(self.file):
+          with open(self.file, 'r') as f:
+            self.config = json.load(f)
+            if self.checkValid():
+              self.write_config(self.config)
+
+      except Exception as ex:
+        print("exception", ex)
+        pass
 
     self.invalidated = True
 
@@ -121,14 +125,6 @@ class nTune():
       self.updateLQR()
     elif self.indi is not None:
       self.updateINDI()
-
-  def get(self, key):
-    v = self.config[key]
-    if v is None:
-      self.read()
-      v = self.config[key]
-
-    return v
 
   def checkValidCommon(self):
     updated = False
@@ -273,4 +269,15 @@ class nTune():
         pass
 
 
-ntune_conf = nTune(None)
+def ntune_get(key):
+  global ntune
+  if ntune == None:
+    ntune = nTune()
+
+  v = ntune.config[key]
+
+  if v is None:
+    ntune.read()
+    v = ntune.config[key]
+
+  return v

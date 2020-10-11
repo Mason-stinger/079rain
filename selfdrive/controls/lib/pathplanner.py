@@ -1,7 +1,7 @@
 import os
 import math
 from common.realtime import sec_since_boot, DT_MDL
-from selfdrive.ntune import ntune_conf
+from selfdrive.ntune import ntune_get
 from selfdrive.swaglog import cloudlog
 from selfdrive.controls.lib.lateral_mpc import libmpc_py
 from selfdrive.controls.lib.drive_helpers import MPC_COST_LAT
@@ -96,7 +96,7 @@ class PathPlanner():
     # Update vehicle model
     x = max(sm['liveParameters'].stiffnessFactor, 0.1)
     # sr = max(sm['liveParameters'].steerRatio, 0.1)
-    sr = max(ntune_conf.get('steerRatio'), 0.1)
+    sr = max(ntune_get('steerRatio'), 0.1)
     VM.update_params(x, sr)
 
     curvature_factor = VM.curvature_factor(v_ego)
@@ -185,7 +185,7 @@ class PathPlanner():
 
     # account for actuation delay
     self.cur_state = calc_states_after_delay(self.cur_state, v_ego, angle_steers - angle_offset, curvature_factor, VM.sR,
-                                             ntune_conf.get('steerActuatorDelay'))
+                                             ntune_get('steerActuatorDelay'))
 
     v_ego_mpc = max(v_ego, 5.0)  # avoid mpc roughness due to low speed
     self.libmpc.run_mpc(self.cur_state, self.mpc_solution,
