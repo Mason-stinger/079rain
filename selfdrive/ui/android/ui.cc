@@ -227,8 +227,11 @@ int main(int argc, char* argv[]) {
       set_awake(s, false);
     }
 
-    if(dashcam(s, touch_x, touch_y))
-        touched = 0;
+    if(s->awake)
+    {
+        if(dashcam(s, touch_x, touch_y))
+            touched = 0;
+    }
 
     if (touched == 1) {
       set_awake(s, true);
