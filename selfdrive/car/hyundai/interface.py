@@ -18,6 +18,9 @@ class CarInterface(CarInterfaceBase):
     self.mad_mode_enabled = Params().get('MadModeEnabled') == b'1'
     self.lkas_button_alert = False
 
+    self.blinker_status = 0
+    self.blinker_timer = 0
+
   @staticmethod
   def compute_gb(accel, speed):
     return float(accel) / 3.0
@@ -224,6 +227,38 @@ class CarInterface(CarInterfaceBase):
     if self.CP.carFingerprint == CAR.OPTIMA:
       ret.leftBlinker = bool(self.CS.left_blinker_flash or self.CS.prev_left_blinker and self.CC.turning_signal_timer)
       ret.rightBlinker = bool(self.CS.right_blinker_flash or self.CS.prev_right_blinker and self.CC.turning_signal_timer)
+
+    ###
+
+    if self.CS.left_blinker_flash and self.CS.right_blinker_flash:
+      self.blinker_status = 3
+      self.blinker_timer = 50
+    elif self.CS.left_blinker_flash:
+      self.blinker_status = 2
+      self.blinker_timer = 50
+    elif self.CS.right_blinker_flash:
+      self.blinker_status = 1
+      self.blinker_timer = 50
+    elif not self.blinker_timer:
+      self.blinker_status = 0
+
+    if self.blinker_status == 3:
+      ret.leftBlinker = bool(self.blinker_timer)
+      ret.rightBlinker = bool(self.blinker_timer)
+    elif self.blinker_status == 2:
+      ret.rightBlinker = False
+      ret.leftBlinker = bool(self.blinker_timer)
+    elif self.blinker_status == 1:
+      ret.leftBlinker = False
+      ret.rightBlinker = bool(self.blinker_timer)
+    else:
+      ret.leftBlinker = False
+      ret.rightBlinker = False
+
+    if self.blinker_timer:
+      self.blinker_timer -= 1
+
+
 
     # turning indicator alert logic
     if (ret.leftBlinker or ret.rightBlinker or self.CC.turning_signal_timer) and ret.vEgo < LANE_CHANGE_SPEED_MIN - 1.2:
