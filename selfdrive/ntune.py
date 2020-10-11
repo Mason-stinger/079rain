@@ -268,11 +268,14 @@ class nTune():
       except:
         pass
 
-
+ntune = None
 def ntune_get(key):
   global ntune
   if ntune == None:
     ntune = nTune()
+
+  if not ntune.config.has_key(key):
+    ntune.read()
 
   v = ntune.config[key]
 
