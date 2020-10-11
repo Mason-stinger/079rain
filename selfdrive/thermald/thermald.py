@@ -16,6 +16,7 @@ from common.params import Params, put_nonblocking
 from common.realtime import DT_TRML, sec_since_boot
 from selfdrive.controls.lib.alertmanager import set_offroad_alert
 from selfdrive.loggerd.config import get_available_percent
+from selfdrive.ntune import ntune_conf
 from selfdrive.pandad import get_expected_signature
 from selfdrive.swaglog import cloudlog
 from selfdrive.thermald.power_monitoring import (PowerMonitoring,
@@ -203,6 +204,8 @@ def thermald_thread():
     location = messaging.recv_sock(location_sock)
     location = location.gpsLocation if location else None
     msg = read_thermal(thermal_config)
+
+    print("cameraOffset", ntune_conf.get("cameraOffset"))
 
     if health is not None:
       usb_power = health.health.usbPowerMode != log.HealthData.UsbPowerMode.client

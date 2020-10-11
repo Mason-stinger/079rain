@@ -10,6 +10,7 @@ CONF_COMMON_FILE = '/data/ntune/common.json'
 CONF_LQR_FILE = '/data/ntune/lat_lqr.json'
 CONF_INDI_FILE = '/data/ntune/lat_indi.json'
 
+
 class nTune():
   def __init__(self, CP, controller=None):
 
@@ -270,7 +271,6 @@ class nTune():
           os.chmod(self.file, 0o764)
       except:
         pass
-
 
 
 ntune_conf = nTune(None)
