@@ -90,8 +90,6 @@ class LanePlanner():
 
     cameraOffset = ntune_get("cameraOffset")
 
-    print("cameraOffset", cameraOffset)
-
     self.l_poly[3] += cameraOffset
     self.r_poly[3] += cameraOffset
 
