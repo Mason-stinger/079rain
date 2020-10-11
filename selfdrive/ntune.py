@@ -50,19 +50,16 @@ class nTune():
       pass
 
   def handler(self, signum, frame):
+    try:
+      if os.path.isfile(self.file):
+        with open(self.file, 'r') as f:
+          self.config = json.load(f)
+          if self.checkValid():
+            self.write_config(self.config)
 
-    if self.file == CONF_COMMON_FILE:
-      try:
-
-        if os.path.isfile(self.file):
-          with open(self.file, 'r') as f:
-            self.config = json.load(f)
-            if self.checkValid():
-              self.write_config(self.config)
-
-      except Exception as ex:
-        print("exception", ex)
-        pass
+    except Exception as ex:
+      print("exception", ex)
+      pass
 
     self.invalidated = True
 
