@@ -69,7 +69,7 @@ class CarInterface(CarInterfaceBase):
     elif candidate in [CAR.SONATA19, CAR.SONATA19_HEV]:
       ret.mass = 4497. * CV.LB_TO_KG
       ret.wheelbase = 2.804
-    elif candidate  == CAR.SONATA_LF_TURBO:
+    elif candidate == CAR.SONATA_LF_TURBO:
       ret.mass = 1590. + STD_CARGO_KG
       ret.wheelbase = 2.805
       tire_stiffness_factor = 0.65
