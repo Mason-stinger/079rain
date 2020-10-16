@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from cereal import car
 from selfdrive.config import Conversions as CV
-from selfdrive.car.hyundai.values import Ecu, ECU_FINGERPRINT, CAR, FINGERPRINTS, Buttons
+from selfdrive.car.hyundai.values import Ecu, ECU_FINGERPRINT, CAR, FINGERPRINTS, Buttons, FEATURES
 from selfdrive.car import STD_CARGO_KG, scale_rot_inertia, scale_tire_stiffness, is_ecu_disconnected, gen_empty_fingerprint
 from selfdrive.car.interfaces import CarInterfaceBase
 from selfdrive.controls.lib.pathplanner import LANE_CHANGE_SPEED_MIN
@@ -238,33 +238,35 @@ class CarInterface(CarInterfaceBase):
 
     ###
 
-    if self.CS.left_blinker_flash and self.CS.right_blinker_flash:
-      self.blinker_status = 3
-      self.blinker_timer = 50
-    elif self.CS.left_blinker_flash:
-      self.blinker_status = 2
-      self.blinker_timer = 50
-    elif self.CS.right_blinker_flash:
-      self.blinker_status = 1
-      self.blinker_timer = 50
-    elif not self.blinker_timer:
-      self.blinker_status = 0
+    if self.CP.carFingerprint in FEATURES["use_blinker_flash"]:
 
-    if self.blinker_status == 3:
-      ret.leftBlinker = bool(self.blinker_timer)
-      ret.rightBlinker = bool(self.blinker_timer)
-    elif self.blinker_status == 2:
-      ret.rightBlinker = False
-      ret.leftBlinker = bool(self.blinker_timer)
-    elif self.blinker_status == 1:
-      ret.leftBlinker = False
-      ret.rightBlinker = bool(self.blinker_timer)
-    else:
-      ret.leftBlinker = False
-      ret.rightBlinker = False
+      if self.CS.left_blinker_flash and self.CS.right_blinker_flash:
+        self.blinker_status = 3
+        self.blinker_timer = 50
+      elif self.CS.left_blinker_flash:
+        self.blinker_status = 2
+        self.blinker_timer = 50
+      elif self.CS.right_blinker_flash:
+        self.blinker_status = 1
+        self.blinker_timer = 50
+      elif not self.blinker_timer:
+        self.blinker_status = 0
 
-    if self.blinker_timer:
-      self.blinker_timer -= 1
+      if self.blinker_status == 3:
+        ret.leftBlinker = bool(self.blinker_timer)
+        ret.rightBlinker = bool(self.blinker_timer)
+      elif self.blinker_status == 2:
+        ret.rightBlinker = False
+        ret.leftBlinker = bool(self.blinker_timer)
+      elif self.blinker_status == 1:
+        ret.leftBlinker = False
+        ret.rightBlinker = bool(self.blinker_timer)
+      else:
+        ret.leftBlinker = False
+        ret.rightBlinker = False
+
+      if self.blinker_timer:
+        self.blinker_timer -= 1
 
 
 
